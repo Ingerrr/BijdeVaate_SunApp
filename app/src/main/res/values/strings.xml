@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BijdeVaate_SunApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="typeLocation">Type your location</string>
+    <string name="findOut">Find out!</string>
+    <string name="sunnyNow">Is it sunny right now?</string>
+    <string name="headerText">Is it sunny right now?</string>
+    <string name="headerCityText">"Is it sunny in "</string>
+</resources>
