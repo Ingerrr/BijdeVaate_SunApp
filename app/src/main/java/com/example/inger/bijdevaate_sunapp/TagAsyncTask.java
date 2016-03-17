@@ -2,8 +2,10 @@ package com.example.inger.bijdevaate_sunapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.PowerManager;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -11,12 +13,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Inger on 14-3-2016.
+ * Enables http connection and downloading of data from service on different thread than main activity
  */
 public class TagAsyncTask extends AsyncTask<String, Integer, String> {
-
+    // Fields
     private Context context;
     private MainActivity activity;
+    private String[] input;
 
     // Constructor
     public TagAsyncTask(MainActivity activity){
@@ -25,16 +28,25 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
         this.context = this.activity.getApplicationContext();
     }
 
+    /**
+     * Message user that weather data is prepared
+     */
     @Override
-    protected void onPreExecute() {
+    protected void onPreExecute(){
         super.onPreExecute();
-        // toast message
+
     }
 
+    /*
+    * Activates download weather data from the internet
+     */
     @Override
     protected String doInBackground(String... params) {
+
+        input = params;
+        // Calls http request helper to download data
         try {
-            return httpRequestHelper.downloadFromServer(params);
+            return httpRequestHelper.downloadFromServer(input);
         } catch (JSONException e) {
             e.printStackTrace();
             return new String();
@@ -42,31 +54,63 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
 
     }
 
+    /*
+    * Hands over data to main activity after data has been downloaded
+     */
     @Override
     protected void onPostExecute(String json){
         super.onPostExecute(json);
+
+        // initialize variables
         JSONObject data;
         WeatherData weatherData = null;
 
         if(json.length()==0){
-            Toast.makeText(context,"There is something wrong with your internet connection", Toast.LENGTH_LONG).show();
+            // set error message if no data has been obtained
+            Toast.makeText(context, R.string.internetMessage, Toast.LENGTH_LONG).show();
             return;
         }
         else{
+            // extract data from json object
             try {
+                // convert input string into json object
                 data = new JSONObject(json.toString());
+
+                // check for possible error code
                 int cod = data.getInt("cod");
-                if(cod == 200) {
+
+                // if there was no error
+                if(cod >= 200 && cod < 299) {
+                    // extract all required info from json object
                     JSONObject weather = data.getJSONArray("weather").getJSONObject(0);
                     int weatherCode = weather.getInt("id");
                     Long sunrise = data.getJSONObject("sys").getLong("sunrise");
                     Long sunset = data.getJSONObject("sys").getLong("sunset");
                     String cityName = data.getString("name");
+
+                    // check if city name from JSON object is similar to user input to prevent wrong results
+                    if(!cityName.toLowerCase().contains(input[0].toLowerCase())){
+                        if(!input[0].toLowerCase().contains(cityName.toLowerCase())){
+                            // show error
+                            Toast.makeText(context, R.string.errorMessage, Toast.LENGTH_LONG).show();
+                            // clear input field
+                            ((EditText) activity.findViewById(R.id.inputField)).setText("");
+                            return;
+                        }
+                    }
+
+                    // create WeatherData object
                     weatherData = new WeatherData(sunset, sunrise, weatherCode, cityName);
+
+                    // return to mainActivity and set data
                     this.activity.setData(weatherData);
                 }
+                // if there has occurred an error
                 else{
+                    // obtain error message from json object
                     String errorMessage = data.getString("message");
+
+                    // show error
                     Toast.makeText(context,errorMessage, Toast.LENGTH_LONG).show();
 
                     // clear input field
@@ -77,7 +121,6 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
                 e.printStackTrace();
             }
         }
-
-
     }
+
 }

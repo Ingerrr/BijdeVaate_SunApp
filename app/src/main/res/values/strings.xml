@@ -8,4 +8,15 @@
     <string name="sunnyNow">Is it sunny right now?</string>
     <string name="headerText">Is it sunny right now?</string>
     <string name="headerCityText">"Is it sunny in "</string>
+    <string name="errorMessage">Error: not found city</string>
+    <string name="internetMessage">There is something wrong with your internet connection</string>
+    <string name="dataMessage">Getting data from server</string>
+    <string name="sunnyText">"Yes, it is sunny at "</string>
+    <string name="partlyText">"It is sort of sunny at "</string>
+    <string name="mostlyText">"It is almost sunny at "</string>
+    <string name="cloudyText">"Sadly enough, it is not sunny at "</string>
+    <string name="nightText">Go to sleep, man</string>
+    <string name="refreshMessage">Weather is up to date</string>
+    <string name="refreshButton">Refresh</string>
+    <string name="locationButton">Change location</string>
 </resources>
