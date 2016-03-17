@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,14 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void search(View view) throws JSONException {
         input = ((EditText)findViewById(R.id.inputField)).getText().toString();
-        input = input.replaceAll("\\s","");
+        input = input.replaceAll("\\s", "");
+        input = input.replaceAll("\\P{L}","");
+
         TagAsyncTask tagAsyncTask = new TagAsyncTask(MainActivity.this);
         try {
             tagAsyncTask.execute(input);
         }catch (Exception e){
-            tagAsyncTask.cancel(true);
-            //toast
+            e.printStackTrace();
         }
+
 
     }
 
@@ -57,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         (findViewById(R.id.partly)).setVisibility(View.INVISIBLE);
         (findViewById(R.id.cloudy)).setVisibility(View.INVISIBLE);
         (findViewById(R.id.night)).setVisibility(View.INVISIBLE);
+        (findViewById(R.id.image)).setVisibility(View.VISIBLE);
 
         Long timeStamp = System.currentTimeMillis()+3600000;
 
-        // set visibilities and change texts
         if(timeStamp < sunset && timeStamp > sunrise){
             if(weatherCode == 800){
                 // clear
@@ -117,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
         // clear input field
         ((EditText)findViewById(R.id.inputField)).setText("");
-
-        // if ERROR
     }
 
     public void refresh(View view) {
@@ -134,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
     public void changeLocation(View view) {
         findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
         findViewById(R.id.outputLayout).setVisibility(View.INVISIBLE);
+        ((TextView)findViewById(R.id.header)).setText(getString(R.string.headerText));
     }
+
 
     // save data when orientation changes
 }

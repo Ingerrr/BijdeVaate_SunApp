@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.PowerManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -46,24 +47,37 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
         super.onPostExecute(json);
         JSONObject data;
         WeatherData weatherData = null;
+
         if(json.length()==0){
-            Toast.makeText(context,"Location not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"There is something wrong with your internet connection", Toast.LENGTH_LONG).show();
             return;
         }
         else{
             try {
                 data = new JSONObject(json.toString());
-                JSONObject weather = data.getJSONArray("weather").getJSONObject(0);
-                int weatherCode = weather.getInt("id");
-                Long sunrise = data.getJSONObject("sys").getLong("sunrise");
-                Long sunset = data.getJSONObject("sys").getLong("sunset");
-                String cityName = data.getString("name");
-                weatherData = new WeatherData(sunset,sunrise,weatherCode,cityName);
+                int cod = data.getInt("cod");
+                if(cod == 200) {
+                    JSONObject weather = data.getJSONArray("weather").getJSONObject(0);
+                    int weatherCode = weather.getInt("id");
+                    Long sunrise = data.getJSONObject("sys").getLong("sunrise");
+                    Long sunset = data.getJSONObject("sys").getLong("sunset");
+                    String cityName = data.getString("name");
+                    weatherData = new WeatherData(sunset, sunrise, weatherCode, cityName);
+                    this.activity.setData(weatherData);
+                }
+                else{
+                    String errorMessage = data.getString("message");
+                    Toast.makeText(context,errorMessage, Toast.LENGTH_LONG).show();
+
+                    // clear input field
+                    ((EditText) activity.findViewById(R.id.inputField)).setText("");
+                    return;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-    this.activity.setData(weatherData);
+
     }
 }
