@@ -54,56 +54,74 @@
         android:layout_height="match_parent"
         android:id="@+id/outputLayout"
         android:visibility="invisible">
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_centerInParent="true"
-            android:id="@+id/image">
+            android:layout_centerInParent="true">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sunny"
                 android:visibility="invisible"
-                android:id="@+id/sunny"/>
-            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/image">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sunny"
+                    android:visibility="invisible"
+                    android:id="@+id/sunny"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/partly"
+                    android:visibility="invisible"
+                    android:id="@+id/partly"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cloudy"
+                    android:visibility="invisible"
+                    android:id="@+id/cloudy"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/night"
+                    android:visibility="invisible"
+                    android:id="@+id/night"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mostly"
+                    android:visibility="invisible"
+                    android:id="@+id/mostly"/>
+            </RelativeLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/partly"
-                android:visibility="invisible"
-                android:id="@+id/partly"/>
-            <ImageView
+                android:text=""
+                android:textSize="20dp"
+                android:textColor="#FF9000"
+                android:id="@+id/textResult"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/image"
+                android:textAlignment="center"/>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cloudy"
-                android:visibility="invisible"
-                android:id="@+id/cloudy"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/night"
-                android:visibility="invisible"
-                android:id="@+id/night"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mostly"
-                android:visibility="invisible"
-                android:id="@+id/mostly"/>
+                android:text=""
+                android:layout_marginTop="20dp"
+                android:textSize="36dp"
+                android:textColor="#FF9000"
+                android:id="@+id/temperature"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/textResult"
+                android:textAlignment="center"/>
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20dp"
-            android:textColor="#FF9000"
-            android:id="@+id/textResult"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/image"
-            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -131,5 +149,6 @@
                 android:onClick="refresh"/>
 
         </LinearLayout>
+
     </RelativeLayout>
 </RelativeLayout>

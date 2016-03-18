@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Message to user if input is empty
         if (input.matches("")){
-            Toast.makeText(this, "No input is given...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.inputMessage, Toast.LENGTH_SHORT).show();
             // clear input field
             ((EditText)findViewById(R.id.inputField)).setText("");
             return;
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Long sunset = weatherData.getSunsetTime()*1000;
         Long sunrise = weatherData.getSunriseTime()*1000;
         int weatherCode = weatherData.getWeather();
+        String temperature = ((Integer)weatherData.getTemp()).toString();
         String city = weatherData.getCity();
 
         // create empty weather text
@@ -182,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
 
         // clear input field
         ((EditText)findViewById(R.id.inputField)).setText("");
+
+        // update temperature field
+        ((TextView) findViewById(R.id.temperature)).setText("( "+ temperature + " \u2103" + " )");
     }
 
     /*

@@ -19,4 +19,5 @@
     <string name="refreshMessage">Weather is up to date</string>
     <string name="refreshButton">Refresh</string>
     <string name="locationButton">Change location</string>
+    <string name="inputMessage">No input is given...</string>
 </resources>

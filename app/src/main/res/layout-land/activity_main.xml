@@ -17,7 +17,7 @@
         android:text=""
         android:textColor="#FF9000"
         android:textSize="36dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:textAlignment="center"
         android:id="@+id/header"
         android:layout_centerHorizontal="true"/>
@@ -26,8 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/inputLayout"
-        android:visibility="visible"
-        android:layout_alignParentBottom="false">
+        android:visibility="visible">
+
         <EditText
             android:layout_width="300dp"
             android:layout_height="40dp"
@@ -53,57 +53,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/outputLayout"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_below="@id/header">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_centerInParent="true"
-            android:id="@+id/image">
+            android:layout_centerHorizontal="true">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sunny"
                 android:visibility="invisible"
-                android:id="@+id/sunny"/>
-            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/image">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sunny"
+                    android:visibility="invisible"
+                    android:id="@+id/sunny"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/partly"
+                    android:visibility="invisible"
+                    android:id="@+id/partly"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cloudy"
+                    android:visibility="invisible"
+                    android:id="@+id/cloudy"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/night"
+                    android:visibility="invisible"
+                    android:id="@+id/night"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mostly"
+                    android:visibility="invisible"
+                    android:id="@+id/mostly"/>
+            </RelativeLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/partly"
-                android:visibility="invisible"
-                android:id="@+id/partly"/>
-            <ImageView
+                android:text=""
+                android:textSize="20dp"
+                android:textColor="#FF9000"
+                android:id="@+id/textResult"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/image"
+                android:textAlignment="center"/>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cloudy"
-                android:visibility="invisible"
-                android:id="@+id/cloudy"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/night"
-                android:visibility="invisible"
-                android:id="@+id/night"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mostly"
-                android:visibility="invisible"
-                android:id="@+id/mostly"/>
+                android:text=""
+                android:layout_marginTop="10dp"
+                android:textSize="36dp"
+                android:textColor="#FF9000"
+                android:id="@+id/temperature"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/textResult"
+                android:textAlignment="center"/>
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20dp"
-            android:textColor="#FF9000"
-            android:id="@+id/textResult"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/image"
-            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,7 +131,7 @@
             android:layout_alignParentBottom="true">
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/changeLocation"
                 android:padding="10dp"
@@ -125,10 +144,10 @@
                 android:layout_weight="1"
                 />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:id="@+id/refresh"
                 android:text="@string/refreshButton"
                 android:background="#FF9000"

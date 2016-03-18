@@ -14,7 +14,7 @@ import java.net.URL;
  */
 public class httpRequestHelper {
     // initial url
-    private static final String urlFormat = "http://api.openweathermap.org/data/2.5/weather?q=%s&APPID=da7170620a0ba8bcf1e2af71d1401764";
+    private static final String urlFormat = "http://api.openweathermap.org/data/2.5/weather?q=%s&APPID=da7170620a0ba8bcf1e2af71d1401764&units=metric";
 
     /**
      * Downloads data from openweathermap with user input as query

@@ -13,16 +13,18 @@ public class WeatherData implements Serializable {
     private Long sunriseTime;
     private int weather;
     private String city;
+    private int temp;
 
     // constructor
     /*
     * Constructs weather data class with sunset sunrise weather code and cityname
      */
-    public WeatherData (Long sunset, Long sunrise, int weatherCode, String cityName) {
+    public WeatherData (Long sunset, Long sunrise, int weatherCode, String cityName, int temperature) {
         sunsetTime = sunset;
         sunriseTime = sunrise;
         weather = weatherCode;
         city = cityName;
+        temp = temperature;
     }
 
     // methods
@@ -52,5 +54,12 @@ public class WeatherData implements Serializable {
      */
     public String getCity(){
         return city;
+    }
+
+    /*
+    * Returns weather code
+    */
+    public int getTemp(){
+        return temp;
     }
 }

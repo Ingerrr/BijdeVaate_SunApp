@@ -2,6 +2,7 @@ package com.example.inger.bijdevaate_sunapp;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -78,6 +79,7 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
                 if(cod >= 200 && cod < 299) {
                     // extract all required info from json object
                     JSONObject weather = data.getJSONArray("weather").getJSONObject(0);
+                    int temp = data.getJSONObject("main").getInt("temp");
                     int weatherCode = weather.getInt("id");
                     Long sunrise = data.getJSONObject("sys").getLong("sunrise");
                     Long sunset = data.getJSONObject("sys").getLong("sunset");
@@ -95,7 +97,7 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
                     }
 
                     // create WeatherData object
-                    weatherData = new WeatherData(sunset, sunrise, weatherCode, cityName);
+                    weatherData = new WeatherData(sunset, sunrise, weatherCode, cityName, temp);
 
                     // return to mainActivity and set data
                     this.activity.setData(weatherData);
