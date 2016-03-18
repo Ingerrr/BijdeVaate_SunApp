@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     String input = "";
     WeatherData weatherData = null;
 
+    // constant
+    int HOUR = 3600000;
+
     /*
     * Sets text of headers and restores last weather data incase orientation has been changed
      */
@@ -32,29 +36,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set a listener to edit text
+        EditText editTextField = (EditText) findViewById(R.id.inputField);
+        setupListener(editTextField);
+
         // check if there is saved data
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             super.onRestoreInstanceState(savedInstanceState);
 
             // extract weatherdata from saved instance
             WeatherData weatherData = (WeatherData) savedInstanceState.getSerializable("weatherData");
 
             // check if weatherdata contains actual weather data (instead of null)
-            if(weatherData != null){
+            if (weatherData != null) {
 
                 // set data
                 setData(weatherData);
-            }
-            else{
+                input = savedInstanceState.getString("inputText");
+            } else {
                 // else, set basic settings of main screen
                 ((TextView) findViewById(R.id.header)).setText(R.string.headerText);
 
                 // restore text of edittext field
                 String editText = savedInstanceState.getString("editText");
-                ((EditText)findViewById(R.id.inputField)).setText(editText);
+                ((EditText) findViewById(R.id.inputField)).setText(editText);
             }
-        }
-        else{
+        } else {
             // if no data is saved, set basic settings of main screen
             ((TextView) findViewById(R.id.header)).setText(R.string.headerText);
         }
@@ -64,28 +71,32 @@ public class MainActivity extends AppCompatActivity {
     * Extracts relevant weather data for user input from the internet
      */
     public void search(View view) throws JSONException {
+        search();
+    }
+
+    public void search() throws JSONException {
         // Get input from user
-        input = ((EditText)findViewById(R.id.inputField)).getText().toString();
+        input = ((EditText) findViewById(R.id.inputField)).getText().toString();
 
         // Remove white spaces
         input = input.replaceAll("\\s", "");
 
         // Message to user if input is empty
-        if (input.matches("")){
+        if (input.matches("")) {
             Toast.makeText(this, R.string.inputMessage, Toast.LENGTH_SHORT).show();
             // clear input field
-            ((EditText)findViewById(R.id.inputField)).setText("");
+            ((EditText) findViewById(R.id.inputField)).setText("");
             return;
         }
 
         // Remove any non-characters
-        input = input.replaceAll("\\P{L}","");
+        input = input.replaceAll("\\P{L}", "");
 
         // Create asynctask that handles data
         TagAsyncTask tagAsyncTask = new TagAsyncTask(MainActivity.this);
         try {
             tagAsyncTask.execute(input);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -93,15 +104,15 @@ public class MainActivity extends AppCompatActivity {
     /*
     * Display weather data obtained by asyncTask from the internet
      */
-    public void setData(WeatherData weather){
+    public void setData(WeatherData weather) {
         // store weather info in global variable
         weatherData = weather;
 
         // extract relevant weather info from the JSON object
-        Long sunset = weatherData.getSunsetTime()*1000;
-        Long sunrise = weatherData.getSunriseTime()*1000;
+        Long sunset = weatherData.getSunsetTime() * 1000;
+        Long sunrise = weatherData.getSunriseTime() * 1000;
         int weatherCode = weatherData.getWeather();
-        String temperature = ((Integer)weatherData.getTemp()).toString();
+        String temperature = ((Integer) weatherData.getTemp()).toString();
         String city = weatherData.getCity();
 
         // create empty weather text
@@ -118,29 +129,27 @@ public class MainActivity extends AppCompatActivity {
         (findViewById(R.id.night)).setVisibility(View.INVISIBLE);
 
         // get current timestamp (timezone UTC + 1)
-        Long timeStamp = System.currentTimeMillis()+3600000;
+        Long timeStamp = System.currentTimeMillis() + 1 * HOUR;
 
         // check whether it is daytime
-        if(timeStamp < sunset && timeStamp > sunrise){
+        // sunset and sunrise increased/decreased by 1.5 hour to account for twilight
+        if (timeStamp < sunset + 1.5 * HOUR && timeStamp > sunrise - 1.5 * HOUR) {
 
             // check the weather code
-            if(weatherCode == 800){
+            if (weatherCode == 800) {
                 // activate sunny-icon
                 (findViewById(R.id.sunny)).setVisibility(View.VISIBLE);
                 // update weatherText to sunny
                 weatherText = getString(R.string.sunnyText);
-            }
-            else if(weatherCode == 802){
+            } else if (weatherCode == 802) {
                 // activate partly sunny icon and text
                 (findViewById(R.id.partly)).setVisibility(View.VISIBLE);
                 weatherText = getString(R.string.partlyText);
-            }
-            else if(weatherCode == 801){
+            } else if (weatherCode == 801) {
                 // activate mostly sunny icon and text
                 (findViewById(R.id.mostly)).setVisibility(View.VISIBLE);
                 weatherText = getString(R.string.mostlyText);
-            }
-            else{
+            } else {
                 // activate cloudy icon and text
                 (findViewById(R.id.cloudy)).setVisibility(View.VISIBLE);
                 weatherText = getString(R.string.cloudyText);
@@ -156,22 +165,22 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textResult)).setText(weatherText + formattedDate + "!");
 
             // change background of app to light blue
-            findViewById(R.id.mainLayout).setBackgroundColor(Color.parseColor("#0070FF"));
-            findViewById(R.id.inputField).setBackgroundColor(Color.parseColor("#0080FF"));
+            findViewById(R.id.mainLayout).setBackgroundColor(Color.parseColor("#44A5D6"));
+            findViewById(R.id.inputField).setBackgroundColor(Color.parseColor("#2A8DBF"));
         }
         // if it is nighttime
-        else{
+        else {
             // activate night icon and text
             (findViewById(R.id.night)).setVisibility(View.VISIBLE);
             weatherText = getString(R.string.nightText);
 
             // update weather text
-            ((TextView)findViewById(R.id.textResult)).setText(weatherText);
+            ((TextView) findViewById(R.id.textResult)).setText(weatherText);
 
             // change background of app to dark blue
             findViewById(R.id.mainLayout).setBackgroundColor(Color.parseColor("#000030"));
             findViewById(R.id.inputField).setBackgroundColor(Color.parseColor("#000040"));
-    }
+        }
         // update header
         ((TextView) findViewById(R.id.header)).setText(getString(R.string.headerCityText) + city + "?");
 
@@ -182,10 +191,10 @@ public class MainActivity extends AppCompatActivity {
         (findViewById(R.id.outputLayout)).setVisibility(View.VISIBLE);
 
         // clear input field
-        ((EditText)findViewById(R.id.inputField)).setText("");
+        ((EditText) findViewById(R.id.inputField)).setText("");
 
         // update temperature field
-        ((TextView) findViewById(R.id.temperature)).setText("( "+ temperature + " \u2103" + " )");
+        ((TextView) findViewById(R.id.temperature)).setText("( " + temperature + " \u2103" + " )");
     }
 
     /*
@@ -197,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // gather relevant weather data for user input location
             tagAsyncTask.execute(input);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -218,41 +227,74 @@ public class MainActivity extends AppCompatActivity {
     * would shut the app down when there is only one activity.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         // check if the back button is pressed
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             // return to main screen
-            backToMain();
-            return true;
+
         }
+        /*// check if enter is pressed
+        else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // return to main screen
+            try {
+                search();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("this","normal");
+            return true;
+        }*/
         return super.onKeyDown(keyCode, event);
     }
 
     /*
     * Return to main screen where the user can input location
      */
-    public void backToMain(){
+    public void backToMain() {
         // activate input layout
         findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
         // disable output layout
         findViewById(R.id.outputLayout).setVisibility(View.INVISIBLE);
         // set header text back to normal
-        ((TextView)findViewById(R.id.header)).setText(getString(R.string.headerText));
+        ((TextView) findViewById(R.id.header)).setText(getString(R.string.headerText));
     }
 
     /*
     * Save weather data and input text when orientation changes
      */
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // retrieve text from input field
-        String editText = ((EditText)findViewById(R.id.inputField)).getText().toString();
+        String editText = ((EditText) findViewById(R.id.inputField)).getText().toString();
 
         // put input text and weather data into outstate
         outState.putString("editText", editText);
         outState.putSerializable("weatherData", weatherData);
+        outState.putString("inputText", input);
+    }
+
+    /*
+    *  Set listener to editText hat calls search method if enter is pressed
+    */
+    public void  setupListener(EditText editText){
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+
+            @Override
+            public boolean onEditorAction (TextView v,int actionId, KeyEvent event){
+                // check if enter is pressed
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    try {
+                        // if so, call search method
+                        search();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }
 

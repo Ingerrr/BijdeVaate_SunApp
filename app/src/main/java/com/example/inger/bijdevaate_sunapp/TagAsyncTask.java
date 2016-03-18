@@ -2,7 +2,6 @@ package com.example.inger.bijdevaate_sunapp;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 

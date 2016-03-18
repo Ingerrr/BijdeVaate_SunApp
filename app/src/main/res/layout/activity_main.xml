@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#FF9000"
-        android:textSize="36dp"
+        android:textSize="30dp"
         android:layout_marginTop="30dp"
         android:textAlignment="center"
         android:id="@+id/header"
@@ -36,6 +36,8 @@
             android:textAlignment="center"
             android:background="#000040"
             android:textColor="#FF9000"
+            android:inputType="textCapSentences"
+            android:imeOptions="actionSearch"
             android:id="@+id/inputField"/>
 
         <Button
