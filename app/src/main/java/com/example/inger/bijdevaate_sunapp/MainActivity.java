@@ -9,21 +9,15 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
+
 /*
 * Obtains relevant weather data for location given by user at current time
 * and determines if it is day or night based on sunset and sunrise times.
@@ -73,9 +67,21 @@ public class MainActivity extends AppCompatActivity {
     * Extracts relevant weather data for user input from the internet
      */
     public void search(View view) throws JSONException {
-        // Get input from user and remove all non-characters
+        // Get input from user
         input = ((EditText)findViewById(R.id.inputField)).getText().toString();
+
+        // Remove white spaces
         input = input.replaceAll("\\s", "");
+
+        // Message to user if input is empty
+        if (input.matches("")){
+            Toast.makeText(this, "No input is given...", Toast.LENGTH_SHORT).show();
+            // clear input field
+            ((EditText)findViewById(R.id.inputField)).setText("");
+            return;
+        }
+
+        // Remove any non-characters
         input = input.replaceAll("\\P{L}","");
 
         // Create asynctask that handles data
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         String city = weatherData.getCity();
 
         // create empty weather text
-        String weatherText = "";
+        String weatherText;
 
         // activate the layout for the weather icon
         (findViewById(R.id.image)).setVisibility(View.VISIBLE);
