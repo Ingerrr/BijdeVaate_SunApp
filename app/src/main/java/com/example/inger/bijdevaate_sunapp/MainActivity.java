@@ -1,11 +1,8 @@
 package com.example.inger.bijdevaate_sunapp;
 
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 weatherText = getString(R.string.cloudyText);
             }
 
-            // convert timestamp into digital clock
+            // convert timestamp into digital clock format
             Timestamp stamp = new Timestamp(timeStamp);
             Date date = new Date(stamp.getTime());
             SimpleDateFormat sdf = new SimpleDateFormat("H:mm");

@@ -1,11 +1,7 @@
 package com.example.inger.bijdevaate_sunapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.AsyncTask;
-import android.os.PowerManager;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -63,18 +59,17 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
 
         // initialize variables
         JSONObject data;
-        WeatherData weatherData = null;
+        WeatherData weatherData;
 
         if(json.length()==0){
             // set error message if no data has been obtained
             Toast.makeText(context, R.string.internetMessage, Toast.LENGTH_LONG).show();
-            return;
         }
         else{
             // extract data from json object
             try {
                 // convert input string into json object
-                data = new JSONObject(json.toString());
+                data = new JSONObject(json);
 
                 // check for possible error code
                 int cod = data.getInt("cod");
@@ -89,8 +84,8 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
                     String cityName = data.getString("name");
 
                     // check if city name from JSON object is similar to user input to prevent wrong results
-                    if(!cityName.toLowerCase().contains(input[0].toLowerCase())){
-                        if(!input[0].toLowerCase().contains(cityName.toLowerCase())){
+                    if(!cityName.replaceAll("\\s", "").toLowerCase().contains(input[0].toLowerCase())){
+                        if(!input[0].toLowerCase().contains(cityName.replaceAll("\\s", "").toLowerCase())){
                             // show error
                             Toast.makeText(context, R.string.errorMessage, Toast.LENGTH_LONG).show();
                             // clear input field
@@ -115,7 +110,6 @@ public class TagAsyncTask extends AsyncTask<String, Integer, String> {
 
                     // clear input field
                     ((EditText) activity.findViewById(R.id.inputField)).setText("");
-                    return;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
