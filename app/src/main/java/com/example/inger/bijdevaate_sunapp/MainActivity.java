@@ -1,11 +1,13 @@
 package com.example.inger.bijdevaate_sunapp;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -231,19 +233,9 @@ public class MainActivity extends AppCompatActivity {
         // check if the back button is pressed
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             // return to main screen
-
-        }
-        /*// check if enter is pressed
-        else if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            // return to main screen
-            try {
-                search();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Log.d("this","normal");
+            backToMain();
             return true;
-        }*/
+        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -277,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
     /*
     *  Set listener to editText hat calls search method if enter is pressed
     */
-    public void  setupListener(EditText editText){
+    public void  setupListener(final EditText editText){
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
 
             @Override
@@ -287,6 +279,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         // if so, call search method
                         search();
+
+                        // close keyboard
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
